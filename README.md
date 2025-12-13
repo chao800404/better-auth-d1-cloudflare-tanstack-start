@@ -113,15 +113,24 @@ cd better-auth-d1-cloudflare-tanstack-start
 pnpm install
 ```
 
-### 2. Environment Variables Setup
+### 2. Configuration Files Setup
 
-Copy `.env.example` to `.env` and fill in your configuration:
+Copy the example configuration files:
 
 ```bash
+# Copy wrangler configuration
+cp wrangler.jsonc.example wrangler.jsonc
+
+# Copy development environment variables
+cp .env.development.example .env.development
+
+# Copy environment variables for drizzle-kit
 cp .env.example .env
 ```
 
-Edit the `.env` file with your values:
+### 3. Environment Variables Setup
+
+Edit `.env` with your Cloudflare credentials:
 
 ```env
 # Cloudflare D1 Configuration (for drizzle-kit migrations)

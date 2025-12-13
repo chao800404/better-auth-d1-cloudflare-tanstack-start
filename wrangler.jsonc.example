@@ -1,6 +1,10 @@
 /**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
+ * Wrangler Configuration Example
+ * 
+ * Copy this file to wrangler.jsonc and fill in your actual values:
+ * cp wrangler.jsonc.example wrangler.jsonc
+ * 
+ * For more details: https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -15,21 +19,21 @@
   "d1_databases": [
     {
       "binding": "DATABASE",
-      "database_name": "cms",
-      "database_id": "b29c4a70-3956-41e6-9275-c860da1fdecc",
+      "database_name": "your-database-name",
+      "database_id": "YOUR_D1_DATABASE_ID",
       "migrations_dir": "drizzle"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "91e81c443a3c424298f11ea145dddbd3"
+      "id": "YOUR_KV_NAMESPACE_ID"
     }
   ],
   "r2_buckets": [
     {
       "binding": "R2_BUCKET",
-      "bucket_name": "cms-r2"
+      "bucket_name": "your-r2-bucket-name"
     }
   ],
   "vars": {

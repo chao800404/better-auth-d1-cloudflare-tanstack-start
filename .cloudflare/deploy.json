@@ -14,12 +14,8 @@
   "env": {
     "BETTER_AUTH_SECRET": {
       "type": "secret",
-      "description": "Secret key for Better Auth (auto-generated if not provided)",
-      "generate": {
-        "type": "random",
-        "length": 32,
-        "encoding": "base64"
-      }
+      "description": "Secret key for Better Auth (default provided for testing - change for production!)",
+      "default": "NkxvvpZX6N3/2A0dG5o1HCXky8siWCQQU3aWzO2+04s="
     }
   },
   "resources": {

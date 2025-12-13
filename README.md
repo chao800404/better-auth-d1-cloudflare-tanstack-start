@@ -72,12 +72,12 @@ Click the button below to deploy directly to Cloudflare Workers:
    - Installs dependencies
    - Builds your application
    - Deploys to Cloudflare's global network
-   - **Auto-generates** `BETTER_AUTH_SECRET` (32-character secure key)
+   - Provides default `BETTER_AUTH_SECRET` for testing
 
 5. **Live in Minutes** ✅
    - Your app is live at `https://your-worker.workers.dev`
    - Automatic deployments on every push to `main`
-   - No manual secret configuration needed!
+   - **For production**: Change the secret using `wrangler secret put BETTER_AUTH_SECRET`
 
 **Time to deploy**: ~3-5 minutes ⏱️
 

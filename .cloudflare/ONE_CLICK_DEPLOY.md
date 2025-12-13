@@ -16,8 +16,21 @@ That's it! Your app will be live at `https://your-worker.workers.dev`
 - ✅ D1 Database (`better-auth-db`)
 - ✅ KV Namespace (`better-auth-kv`)
 - ✅ R2 Bucket (`better-auth-r2`)
-- ✅ `BETTER_AUTH_SECRET` (auto-generated)
+- ✅ `BETTER_AUTH_SECRET` (default provided for testing)
 - ✅ Automatic deployments on every push
+
+## ⚠️ Important for Production
+
+The deployment uses a default `BETTER_AUTH_SECRET` for testing. **Change it for production**:
+
+```bash
+# Generate a new secret
+openssl rand -base64 32
+
+# Set it in Cloudflare
+pnpm wrangler secret put BETTER_AUTH_SECRET
+# Paste the generated secret when prompted
+```
 
 ## Troubleshooting
 

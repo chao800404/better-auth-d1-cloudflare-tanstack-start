@@ -32,9 +32,6 @@
       "bucket_name": "YOUR_R2_BUCKET_NAME",
     },
   ],
-  "vars": {
-    "PUBLIC_URL": "https://your-worker-name.your-subdomain.workers.dev",
-  },
   // IMPORTANT: Do NOT put BETTER_AUTH_SECRET in vars!
   // Set it as a secret using: pnpm wrangler secret put BETTER_AUTH_SECRET
   /**

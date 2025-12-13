@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   beforeLoad: ({ context }) => {
-    if (context.session) {
+    if (context?.session) {
       throw redirect({ to: "/dashboard" });
     }
   },

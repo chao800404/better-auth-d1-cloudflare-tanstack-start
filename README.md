@@ -142,6 +142,50 @@ The application will start at `http://localhost:3000`.
 
 ## 🗄️ Database Management
 
+### Adding Custom Schemas
+
+The project uses a unified schema approach. To add your own tables:
+
+1. **Create a new schema file** (e.g., `src/db/posts.schema.ts`):
+
+```typescript
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { users } from "./auth.schema";
+
+export const posts = sqliteTable("posts", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  authorId: text("author_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+```
+
+2. **Import and add to `src/db/schema.ts`**:
+
+```typescript
+import * as authSchema from "./auth.schema";
+import { posts } from "./posts.schema";
+
+export const schema = {
+  ...authSchema,
+  posts, // Add your custom tables here
+} as const;
+```
+
+3. **Generate and apply migrations**:
+
+```bash
+pnpm db:generate
+pnpm db:migrate:dev
+```
+
+See `src/db/example.schema.ts` for more examples.
+
 ### Update Database Schema
 
 ```bash

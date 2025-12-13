@@ -56,30 +56,28 @@ Click the button below to deploy directly to Cloudflare Workers:
 **The one-click deploy will:**
 
 1. **Fork Repository** 🍴
-
    - Creates a copy of this template in your GitHub account
    - You maintain full control over the code
 
 2. **Connect to Cloudflare** 🔗
-
    - Links your GitHub repository to Cloudflare
    - Sets up automatic deployments
 
 3. **Create Resources** 📦
-
    - D1 Database (`better-auth-db`) - For user data and sessions
    - KV Namespace (`better-auth-kv`) - For rate limiting
    - R2 Bucket (`better-auth-r2`) - For file uploads
 
 4. **Build & Deploy** 🚀
-
    - Installs dependencies
    - Builds your application
    - Deploys to Cloudflare's global network
+   - **Auto-generates** `BETTER_AUTH_SECRET` (32-character secure key)
 
 5. **Live in Minutes** ✅
    - Your app is live at `https://your-worker.workers.dev`
    - Automatic deployments on every push to `main`
+   - No manual secret configuration needed!
 
 **Time to deploy**: ~3-5 minutes ⏱️
 
@@ -180,21 +178,21 @@ Replace the placeholder values with your actual IDs:
       "binding": "DATABASE",
       "database_name": "your-database-name", // Your D1 database name
       "database_id": "YOUR_D1_DATABASE_ID", // From step 3.1
-      "migrations_dir": "drizzle"
-    }
+      "migrations_dir": "drizzle",
+    },
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "YOUR_KV_NAMESPACE_ID" // From step 3.2
-    }
+      "id": "YOUR_KV_NAMESPACE_ID", // From step 3.2
+    },
   ],
   "r2_buckets": [
     {
       "binding": "R2_BUCKET",
-      "bucket_name": "your-r2-bucket-name" // From step 3.3 (optional)
-    }
-  ]
+      "bucket_name": "your-r2-bucket-name", // From step 3.3 (optional)
+    },
+  ],
 }
 ```
 

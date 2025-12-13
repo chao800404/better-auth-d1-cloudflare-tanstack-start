@@ -60,6 +60,21 @@ jobs:
       - name: Build application
         run: pnpm build
 
+      - name: Generate BETTER_AUTH_SECRET if not provided
+        id: generate-secret
+        run: |
+          if [ -z "${{ secrets.BETTER_AUTH_SECRET }}" ]; then
+            echo "🔐 Generating BETTER_AUTH_SECRET..."
+            SECRET=$(openssl rand -base64 32)
+            echo "secret=$SECRET" >> $GITHUB_OUTPUT
+            echo "generated=true" >> $GITHUB_OUTPUT
+            echo "✅ Generated new BETTER_AUTH_SECRET"
+          else
+            echo "secret=${{ secrets.BETTER_AUTH_SECRET }}" >> $GITHUB_OUTPUT
+            echo "generated=false" >> $GITHUB_OUTPUT
+            echo "✅ Using existing BETTER_AUTH_SECRET from secrets"
+          fi
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
@@ -68,7 +83,7 @@ jobs:
           secrets: |
             BETTER_AUTH_SECRET
         env:
-          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          BETTER_AUTH_SECRET: ${{ steps.generate-secret.outputs.secret }}
 
       - name: Deployment summary
         run: |

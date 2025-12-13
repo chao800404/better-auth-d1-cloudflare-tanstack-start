@@ -1,5 +1,18 @@
 # TanStack Start + Better Auth + Cloudflare Template
 
+<div align="center">
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-cloudflare-tanstack-start)
+[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-cloudflare-tanstack-start/generate)
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
+![pnpm](https://img.shields.io/badge/pnpm-%3E%3D9.0.0-orange.svg)
+
+</div>
+
+---
+
 A **TanStack Start** template based on [better-auth-cloudflare](https://github.com/zpg6/better-auth-cloudflare), integrated with Better Auth authentication system and Cloudflare Workers deployment.
 
 ## ✨ Features
@@ -22,6 +35,77 @@ A **TanStack Start** template based on [better-auth-cloudflare](https://github.c
 - Node.js 18+
 - pnpm (recommended) or npm
 - Cloudflare account (for deployment)
+
+## ⚡ Quick Deploy
+
+Choose your preferred deployment method:
+
+### Option 1: One-Click Deploy to Cloudflare (Fastest) ⚡
+
+Click the button below to deploy directly to Cloudflare Workers:
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-cloudflare-tanstack-start)
+
+<details>
+<summary>📊 What happens when you click? (Click to expand)</summary>
+
+<br>
+
+![Deployment Workflow](./public/deploy-workflow.png)
+
+**The one-click deploy will:**
+
+1. **Fork Repository** 🍴
+
+   - Creates a copy of this template in your GitHub account
+   - You maintain full control over the code
+
+2. **Connect to Cloudflare** 🔗
+
+   - Links your GitHub repository to Cloudflare
+   - Sets up automatic deployments
+
+3. **Create Resources** 📦
+
+   - D1 Database (`better-auth-db`) - For user data and sessions
+   - KV Namespace (`better-auth-kv`) - For rate limiting
+   - R2 Bucket (`better-auth-r2`) - For file uploads
+
+4. **Build & Deploy** 🚀
+
+   - Installs dependencies
+   - Builds your application
+   - Deploys to Cloudflare's global network
+
+5. **Live in Minutes** ✅
+   - Your app is live at `https://your-worker.workers.dev`
+   - Automatic deployments on every push to `main`
+
+**Time to deploy**: ~3-5 minutes ⏱️
+
+See [detailed deployment guide](./.cloudflare/ONE_CLICK_DEPLOY.md) for more information.
+
+</details>
+
+### Option 2: Use as GitHub Template
+
+Click to create a new repository from this template:
+
+[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-cloudflare-tanstack-start/generate)
+
+Then follow the [manual setup instructions](#-quick-start) below.
+
+### Option 3: Clone and Deploy Manually
+
+```bash
+# Clone the repository
+git clone https://github.com/chao800404/better-auth-cloudflare-tanstack-start.git
+cd better-auth-cloudflare-tanstack-start
+
+# Setup and deploy (see Quick Start below)
+```
+
+---
 
 ## 🚀 Quick Start
 
@@ -306,14 +390,119 @@ wrangler kv:namespace create KV
 wrangler secret put BETTER_AUTH_SECRET
 ```
 
-## 🔄 GitHub Actions Auto-Deploy
+## 🔄 GitHub Actions Auto-Deploy (Optional)
 
-This template includes a GitHub Actions workflow for automatic deployment to Cloudflare Workers.
+This template includes **multiple deployment workflow options** for automatic deployment to Cloudflare Workers.
 
-Add the following Secrets in your GitHub repository settings:
+### 🚀 Quick Setup (Recommended)
 
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
+#### 1. **Automated Resource Setup**
+
+Run the setup script to automatically create all Cloudflare resources:
+
+```bash
+# Set your Cloudflare credentials
+export CLOUDFLARE_API_TOKEN="your_api_token"
+export CLOUDFLARE_ACCOUNT_ID="your_account_id"
+
+# Optional: Customize resource names
+export D1_DATABASE_NAME="my-app-db"
+export KV_NAMESPACE_NAME="my-app-kv"
+export R2_BUCKET_NAME="my-app-r2"
+
+# Run the setup script
+./scripts/setup-cloudflare.sh
+```
+
+This script will:
+
+- ✅ Create D1 database (if not exists)
+- ✅ Create KV namespace (if not exists)
+- ✅ Create R2 bucket (if not exists)
+- ✅ Update `wrangler.jsonc` with correct IDs
+- ✅ Generate and apply database migrations
+
+#### 2. **Configure GitHub Secrets**
+
+Add these secrets in your repository settings (`Settings` → `Secrets and variables` → `Actions`):
+
+- `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token ([Create one here](https://dash.cloudflare.com/profile/api-tokens))
+  - Required permissions: `Workers Scripts:Edit`, `D1:Edit`, `Account Settings:Read`
+- `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
+- `BETTER_AUTH_SECRET` - Generate with: `openssl rand -base64 32`
+
+#### 3. **Enable Auto-Deploy Workflow**
+
+Choose one of the workflow options:
+
+**Option A: Simple Deploy** (Recommended - assumes resources already exist)
+
+```bash
+mv .github/workflows/deploy.yml.example .github/workflows/deploy.yml
+```
+
+**Option B: Full Auto-Deploy** (Creates resources if they don't exist)
+
+```bash
+mv .github/workflows/deploy-full.yml.example .github/workflows/deploy.yml
+```
+
+#### 4. **Deploy**
+
+Push to the `main` branch to trigger automatic deployment:
+
+```bash
+git add .
+git commit -m "Enable auto-deploy"
+git push origin main
+```
+
+Or trigger manually from GitHub Actions tab.
+
+---
+
+### 📋 Workflow Comparison
+
+| Feature         | Simple Deploy                   | Full Auto-Deploy             |
+| --------------- | ------------------------------- | ---------------------------- |
+| **Setup**       | Run `setup-cloudflare.sh` first | Automatic resource creation  |
+| **Speed**       | ⚡ Faster                       | 🐢 Slower (checks resources) |
+| **Reliability** | ✅ More reliable                | ⚠️ May fail on first run     |
+| **Best for**    | Production                      | Experimentation              |
+
+---
+
+### 🛠️ Manual Deployment
+
+If you prefer manual control:
+
+```bash
+# Build and deploy
+pnpm deploy
+
+# Or step by step
+pnpm build
+pnpm wrangler deploy
+```
+
+---
+
+### 🔧 Troubleshooting
+
+**Issue: "Resource already exists" error**
+
+- Use the simple deploy workflow instead
+- Or delete existing resources first
+
+**Issue: "Unauthorized" error**
+
+- Check your `CLOUDFLARE_API_TOKEN` has correct permissions
+- Verify `CLOUDFLARE_ACCOUNT_ID` is correct
+
+**Issue: Migration fails**
+
+- Run migrations manually: `pnpm db:migrate:prod`
+- Check D1 database is accessible
 
 ## 📚 Tech Stack
 

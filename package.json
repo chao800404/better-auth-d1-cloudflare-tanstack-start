@@ -2,6 +2,7 @@
   "name": "better-auth-cloudflare-tanstack-start",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.15.4",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
@@ -13,6 +14,7 @@
     "test": "vitest run",
     "deploy": "pnpm run build && wrangler deploy",
     "preview": "pnpm run build && vite preview",
+    "setup:cloudflare": "./scripts/setup-cloudflare.sh",
     "cf-typegen": "wrangler types",
     "auth:generate": "npx --yes @better-auth/cli@latest generate --config src/auth/index.ts --output src/db/auth.schema.ts -y",
     "auth:format": "npx --yes prettier --write src/db/auth.schema.ts",

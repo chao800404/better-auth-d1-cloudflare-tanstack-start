@@ -1,0 +1,63 @@
+{
+  "$schema": "https://deploy.workers.cloudflare.com/schema.json",
+  "name": "better-auth-cloudflare-tanstack-start",
+  "type": "javascript",
+  "build": {
+    "command": "pnpm install && pnpm build",
+    "cwd": "./",
+    "watch_paths": ["src/**/*"]
+  },
+  "deploy": {
+    "workers_dev": true,
+    "routes": []
+  },
+  "env": {
+    "BETTER_AUTH_SECRET": {
+      "type": "secret",
+      "description": "Secret key for Better Auth (generate with: openssl rand -base64 32)"
+    }
+  },
+  "resources": {
+    "d1_databases": [
+      {
+        "binding": "DATABASE",
+        "name": "better-auth-db",
+        "description": "D1 database for Better Auth"
+      }
+    ],
+    "kv_namespaces": [
+      {
+        "binding": "KV",
+        "name": "better-auth-kv",
+        "description": "KV namespace for rate limiting"
+      }
+    ],
+    "r2_buckets": [
+      {
+        "binding": "R2_BUCKET",
+        "name": "better-auth-r2",
+        "description": "R2 bucket for file uploads (optional)"
+      }
+    ]
+  },
+  "setup": {
+    "steps": [
+      {
+        "title": "Install dependencies",
+        "command": "pnpm install"
+      },
+      {
+        "title": "Generate database schema",
+        "command": "pnpm auth:generate"
+      },
+      {
+        "title": "Generate migrations",
+        "command": "pnpm db:generate"
+      },
+      {
+        "title": "Apply migrations",
+        "command": "pnpm db:migrate:prod"
+      }
+    ]
+  }
+}

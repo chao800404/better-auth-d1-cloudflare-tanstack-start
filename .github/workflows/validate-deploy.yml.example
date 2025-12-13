@@ -1,0 +1,80 @@
+# Validate Deploy Button Configuration
+# This workflow ensures the one-click deploy configuration is valid
+
+name: Validate Deploy Config
+
+on:
+  push:
+    paths:
+      - '.cloudflare/deploy.json'
+      - 'wrangler.jsonc'
+      - 'package.json'
+  pull_request:
+    paths:
+      - '.cloudflare/deploy.json'
+      - 'wrangler.jsonc'
+      - 'package.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Configuration
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate deploy.json
+        run: |
+          echo "Validating .cloudflare/deploy.json..."
+          
+          # Check if file exists
+          if [ ! -f .cloudflare/deploy.json ]; then
+            echo "❌ .cloudflare/deploy.json not found"
+            exit 1
+          fi
+          
+          # Validate JSON syntax
+          if ! jq empty .cloudflare/deploy.json 2>/dev/null; then
+            echo "❌ Invalid JSON in .cloudflare/deploy.json"
+            exit 1
+          fi
+          
+          echo "✅ deploy.json is valid"
+
+      - name: Validate wrangler.jsonc
+        run: |
+          echo "Validating wrangler.jsonc..."
+          
+          # Check if file exists
+          if [ ! -f wrangler.jsonc ]; then
+            echo "❌ wrangler.jsonc not found"
+            exit 1
+          fi
+          
+          # Note: jsonc validation would require a special parser
+          # For now, just check file exists
+          echo "✅ wrangler.jsonc exists"
+
+      - name: Check package.json scripts
+        run: |
+          echo "Checking package.json scripts..."
+          
+          # Check for required scripts
+          REQUIRED_SCRIPTS=("build" "deploy" "setup:cloudflare" "db:generate" "db:migrate:prod")
+          
+          for script in "${REQUIRED_SCRIPTS[@]}"; do
+            if ! jq -e ".scripts.\"$script\"" package.json > /dev/null; then
+              echo "❌ Missing required script: $script"
+              exit 1
+            else
+              echo "✅ Found script: $script"
+            fi
+          done
+
+      - name: Validation summary
+        run: |
+          echo ""
+          echo "🎉 All validations passed!"
+          echo ""
+          echo "The one-click deploy button should work correctly."

@@ -1,0 +1,154 @@
+# Full Auto-Deploy Workflow with Resource Setup
+# 
+# This workflow will:
+# 1. Check if Cloudflare resources exist
+# 2. Create them if they don't exist
+# 3. Apply database migrations
+# 4. Deploy to Cloudflare Workers
+#
+# To enable:
+# 1. Rename to 'deploy.yml'
+# 2. Add these secrets to GitHub:
+#    - CLOUDFLARE_API_TOKEN (with Workers:Edit, D1:Edit, R2:Edit, KV:Edit permissions)
+#    - CLOUDFLARE_ACCOUNT_ID
+#    - BETTER_AUTH_SECRET (generate with: openssl rand -base64 32)
+# 3. Update the resource names below to match your project
+
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  # Customize these names for your project
+  D1_DATABASE_NAME: "my-app-db"
+  KV_NAMESPACE_NAME: "my-app-kv"
+  R2_BUCKET_NAME: "my-app-r2"
+  NODE_VERSION: "22"
+  PNPM_VERSION: "9"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # ============================================
+      # Setup Cloudflare Resources
+      # ============================================
+      
+      - name: Check and create D1 database
+        id: d1-setup
+        continue-on-error: true
+        run: |
+          echo "Checking if D1 database exists..."
+          
+          # Try to list databases and check if ours exists
+          if pnpm wrangler d1 list | grep -q "${{ env.D1_DATABASE_NAME }}"; then
+            echo "D1 database already exists"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Creating D1 database..."
+            pnpm wrangler d1 create ${{ env.D1_DATABASE_NAME }}
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Check and create KV namespace
+        id: kv-setup
+        continue-on-error: true
+        run: |
+          echo "Checking if KV namespace exists..."
+          
+          if pnpm wrangler kv:namespace list | grep -q "${{ env.KV_NAMESPACE_NAME }}"; then
+            echo "KV namespace already exists"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Creating KV namespace..."
+            pnpm wrangler kv:namespace create ${{ env.KV_NAMESPACE_NAME }}
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Check and create R2 bucket
+        id: r2-setup
+        continue-on-error: true
+        run: |
+          echo "Checking if R2 bucket exists..."
+          
+          if pnpm wrangler r2 bucket list | grep -q "${{ env.R2_BUCKET_NAME }}"; then
+            echo "R2 bucket already exists"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Creating R2 bucket..."
+            pnpm wrangler r2 bucket create ${{ env.R2_BUCKET_NAME }}
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # ============================================
+      # Database Migrations
+      # ============================================
+
+      - name: Generate database migrations
+        run: pnpm db:generate
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Apply database migrations
+        run: pnpm db:migrate:prod
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # ============================================
+      # Build and Deploy
+      # ============================================
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          secrets: |
+            BETTER_AUTH_SECRET
+        env:
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+
+      - name: Deployment summary
+        run: |
+          echo "🎉 Deployment completed successfully!"
+          echo "📦 Resources:"
+          echo "  - D1 Database: ${{ env.D1_DATABASE_NAME }}"
+          echo "  - KV Namespace: ${{ env.KV_NAMESPACE_NAME }}"
+          echo "  - R2 Bucket: ${{ env.R2_BUCKET_NAME }}"

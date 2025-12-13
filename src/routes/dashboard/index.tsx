@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 
 import authClient from "@/auth/authClient";
 import FileUploadDemo from "@/components/FileUploadDemo";
@@ -28,6 +28,7 @@ export const Route = createFileRoute("/dashboard/")({
 
 function RouteComponent() {
   const { session } = Route.useRouteContext();
+  const router = useRouter();
 
   if (!session) {
     throw redirect({ to: "/" });
@@ -98,7 +99,14 @@ function RouteComponent() {
                       <strong>User ID:</strong> {session.user.id}
                     </p>
                   )}
-                  <Button onClick={() => authClient.signOut()}>Sign Out</Button>
+                  <Button
+                    onClick={() => {
+                      authClient.signOut();
+                      router.invalidate();
+                    }}
+                  >
+                    Sign Out
+                  </Button>
                 </CardContent>
               </Card>
             </TabsContent>

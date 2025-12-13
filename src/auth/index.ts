@@ -10,7 +10,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { anonymous, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzle } from "drizzle-orm/d1";
-import { schema } from "../db/index";
+import * as schema from "../db/schema";
 
 export interface CloudflareBindings {
   DATABASE: D1Database;

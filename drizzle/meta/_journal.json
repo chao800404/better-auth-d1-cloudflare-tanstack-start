@@ -22,6 +22,20 @@
       "when": 1765630132577,
       "tag": "0002_perfect_agent_zero",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1765630294084,
+      "tag": "0003_ambitious_winter_soldier",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1765630607874,
+      "tag": "0004_goofy_scarlet_witch",
+      "breakpoints": true
     }
   ]
 }

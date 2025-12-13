@@ -4,19 +4,31 @@ import path from "node:path";
 
 function getLocalD1DB() {
   try {
-    const basePath = path.resolve(".wrangler");
+    // Look specifically in the d1 directory for D1 databases
+    const basePath = path.resolve(".wrangler/state/v3/d1");
+
+    if (!fs.existsSync(basePath)) {
+      throw new Error(
+        `D1 directory not found at ${basePath}. Run 'pnpm dev' first to create the local D1 database.`
+      );
+    }
+
     const dbFile = fs
       .readdirSync(basePath, { encoding: "utf-8", recursive: true })
       .find((f) => f.endsWith(".sqlite"));
 
     if (!dbFile) {
-      throw new Error(`.sqlite file not found in ${basePath}`);
+      throw new Error(
+        `.sqlite file not found in ${basePath}. Run 'pnpm dev' first to create the local D1 database.`
+      );
     }
 
     const url = path.resolve(basePath, dbFile);
+    console.log(`Using local D1 database: ${url}`);
     return url;
   } catch (err) {
-    console.log(`Error  ${err}`);
+    console.error(`Error finding local D1 database: ${err}`);
+    throw err;
   }
 }
 

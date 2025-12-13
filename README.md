@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-cloudflare-tanstack-start)
-[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-cloudflare-tanstack-start/generate)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-d1-cloudflare-tanstack-start)
+[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-d1-cloudflare-tanstack-start/generate)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
@@ -44,7 +44,7 @@ Choose your preferred deployment method:
 
 Click the button below to deploy directly to Cloudflare Workers:
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-cloudflare-tanstack-start)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chao800404/better-auth-d1-cloudflare-tanstack-start)
 
 <details>
 <summary>📊 What happens when you click? (Click to expand)</summary>
@@ -91,7 +91,7 @@ See [detailed deployment guide](./.cloudflare/ONE_CLICK_DEPLOY.md) for more info
 
 Click to create a new repository from this template:
 
-[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-cloudflare-tanstack-start/generate)
+[![Use this template](https://img.shields.io/badge/Use_this_template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chao800404/better-auth-d1-cloudflare-tanstack-start/generate)
 
 Then follow the [manual setup instructions](#-quick-start) below.
 
@@ -99,8 +99,8 @@ Then follow the [manual setup instructions](#-quick-start) below.
 
 ```bash
 # Clone the repository
-git clone https://github.com/chao800404/better-auth-cloudflare-tanstack-start.git
-cd better-auth-cloudflare-tanstack-start
+git clone https://github.com/chao800404/better-auth-d1-cloudflare-tanstack-start.git
+cd better-auth-d1-cloudflare-tanstack-start
 
 # Setup and deploy (see Quick Start below)
 ```

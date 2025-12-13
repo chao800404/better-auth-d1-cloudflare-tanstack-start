@@ -8,9 +8,7 @@ function getLocalD1DB() {
     const basePath = path.resolve(".wrangler/state/v3/d1");
 
     if (!fs.existsSync(basePath)) {
-      throw new Error(
-        `D1 directory not found at ${basePath}. Run 'pnpm dev' first to create the local D1 database.`
-      );
+      return null; // Return null instead of throwing, will use production config
     }
 
     const dbFile = fs
@@ -18,25 +16,25 @@ function getLocalD1DB() {
       .find((f) => f.endsWith(".sqlite"));
 
     if (!dbFile) {
-      throw new Error(
-        `.sqlite file not found in ${basePath}. Run 'pnpm dev' first to create the local D1 database.`
-      );
+      return null; // Return null instead of throwing
     }
 
     const url = path.resolve(basePath, dbFile);
     console.log(`Using local D1 database: ${url}`);
     return url;
   } catch (err) {
-    console.error(`Error finding local D1 database: ${err}`);
-    throw err;
+    console.warn(`Could not find local D1 database: ${err}`);
+    return null;
   }
 }
+
+const localD1DBUrl = getLocalD1DB();
 
 export default defineConfig({
   dialect: "sqlite",
   schema: "./src/db/schema.ts",
   out: "./drizzle",
-  ...(process.env.NODE_ENV === "production"
+  ...(process.env.NODE_ENV === "production" || localD1DBUrl === null
     ? {
         driver: "d1-http",
         dbCredentials: {
@@ -47,7 +45,7 @@ export default defineConfig({
       }
     : {
         dbCredentials: {
-          url: getLocalD1DB()!,
+          url: localD1DBUrl!,
         },
       }),
 });

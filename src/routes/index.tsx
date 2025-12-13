@@ -22,12 +22,12 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const [isAuthActionInProgress, setIsAuthActionInProgress] = useState(false);
-  const publicUrl = import.meta.env.VITE_PUBLIC_URL;
+  const { publicURL } = Route.useRouteContext();
 
   const handleAnonymousLogin = async () => {
     setIsAuthActionInProgress(true);
     try {
-      const result = await authClient(publicUrl).signIn.anonymous();
+      const result = await authClient(publicURL).signIn.anonymous();
 
       if (result.error) {
         setIsAuthActionInProgress(false);

@@ -2,6 +2,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { getPublicURL } from "@/server/getPublicUrl";
 import { getSession } from "@/server/getSession";
 import appCss from "../styles.css?url";
 
@@ -28,8 +29,10 @@ export const Route = createRootRoute({
   }),
   beforeLoad: async ({}) => {
     const session = await getSession();
+    const publicURL = await getPublicURL();
     return {
       session,
+      publicURL,
     };
   },
   shellComponent: RootDocument,

@@ -16,6 +16,10 @@
       "type": "secret",
       "description": "Secret key for Better Auth (default provided for testing - change for production!)",
       "default": "NkxvvpZX6N3/2A0dG5o1HCXky8siWCQQU3aWzO2+04s="
+    },
+    "PUBLIC_URL": {
+      "type": "plain_text",
+      "description": "Public URL of your deployed worker (e.g., https://your-worker.workers.dev)"
     }
   },
   "resources": {

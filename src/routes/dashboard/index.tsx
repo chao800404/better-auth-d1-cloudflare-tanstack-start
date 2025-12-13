@@ -29,6 +29,7 @@ export const Route = createFileRoute("/dashboard/")({
 function RouteComponent() {
   const { session } = Route.useRouteContext();
   const router = useRouter();
+  const publicUrl = import.meta.env.VITE_PUBLIC_URL;
 
   if (!session) {
     throw redirect({ to: "/" });
@@ -101,7 +102,7 @@ function RouteComponent() {
                   )}
                   <Button
                     onClick={() => {
-                      authClient.signOut();
+                      authClient(publicUrl).signOut();
                       router.invalidate();
                     }}
                   >

@@ -1,10 +1,6 @@
 /**
- * Wrangler Configuration Example
- * 
- * Copy this file to wrangler.jsonc and fill in your actual values:
- * cp wrangler.jsonc.example wrangler.jsonc
- * 
- * For more details: https://developers.cloudflare.com/workers/wrangler/configuration/
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -13,32 +9,32 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
   "placement": { "mode": "smart" },
   "d1_databases": [
     {
       "binding": "DATABASE",
-      "database_name": "your-database-name",
+      "database_name": "YOUR_DATABASE_NAME",
       "database_id": "YOUR_D1_DATABASE_ID",
-      "migrations_dir": "drizzle"
-    }
+      "migrations_dir": "drizzle",
+    },
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "YOUR_KV_NAMESPACE_ID"
-    }
+      "id": "YOUR_KV_NAMESPACE_ID",
+    },
   ],
   "r2_buckets": [
     {
       "binding": "R2_BUCKET",
-      "bucket_name": "your-r2-bucket-name"
-    }
+      "bucket_name": "YOUR_R2_BUCKET_NAME",
+    },
   ],
   "vars": {
-    "VITE_PUBLIC_URL": "https://your-worker-name.your-subdomain.workers.dev"
-  }
+    "VITE_PUBLIC_URL": "https://your-worker-name.your-subdomain.workers.dev",
+  },
   // IMPORTANT: Do NOT put BETTER_AUTH_SECRET in vars!
   // Set it as a secret using: pnpm wrangler secret put BETTER_AUTH_SECRET
   /**

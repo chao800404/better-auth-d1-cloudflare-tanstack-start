@@ -118,15 +118,14 @@ pnpm install
 Copy the example configuration files:
 
 ```bash
-# Copy wrangler configuration
-cp wrangler.jsonc.example wrangler.jsonc
-
 # Copy development environment variables
 cp .env.development.example .env.development
 
 # Copy environment variables for drizzle-kit
 cp .env.example .env
 ```
+
+**Note**: `wrangler.jsonc` is already in the repository with placeholder values. Update it with your actual Cloudflare resource IDs after running the setup script.
 
 ### 3. Environment Variables Setup
 

@@ -16,6 +16,7 @@ export interface CloudflareBindings {
   DATABASE: D1Database;
   KV: KVNamespace;
   R2_BUCKET: R2Bucket;
+  BETTER_AUTH_SECRET: string;
 }
 
 // Single auth configuration that handles both CLI and runtime scenarios
@@ -65,6 +66,7 @@ function createAuth(
         },
       },
       {
+        secret: env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET,
         emailAndPassword: {
           enabled: true,
         },

@@ -61,7 +61,7 @@
       },
       {
         "title": "Apply migrations to D1 database",
-        "command": "pnpm wrangler d1 migrations apply better-auth-db --remote"
+        "command": "wrangler d1 migrations apply DATABASE --remote"
       }
     ]
   }

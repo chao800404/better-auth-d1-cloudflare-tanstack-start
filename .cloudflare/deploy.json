@@ -14,12 +14,11 @@
   "env": {
     "BETTER_AUTH_SECRET": {
       "type": "secret",
-      "description": "Secret key for Better Auth (default provided for testing - change for production!)",
-      "default": "NkxvvpZX6N3/2A0dG5o1HCXky8siWCQQU3aWzO2+04s="
+      "description": "REQUIRED: Run 'openssl rand -base64 32' in your terminal and paste the result here."
     },
     "PUBLIC_URL": {
       "type": "plain_text",
-      "description": "Public URL of your deployed worker (e.g., https://your-worker.workers.dev)"
+      "description": "Public URL (leave blank for auto-detection or example: https://your-worker.workers.dev)"
     }
   },
   "resources": {
@@ -52,18 +51,9 @@
         "command": "pnpm install"
       },
       {
-        "title": "Generate Better Auth schema",
-        "command": "pnpm auth:generate"
-      },
-      {
-        "title": "Generate database migrations",
-        "command": "pnpm db:generate"
-      },
-      {
-        "title": "Prepare migration files",
-        "command": "ls -la drizzle/*.sql && echo 'Migration files ready for deployment'"
+        "title": "Build application",
+        "command": "pnpm build"
       }
-    ],
-    "note": "⚠️ IMPORTANT: After deployment, you need to initialize the D1 database. Clone your repository and run: pnpm db:migrate:prod"
+    ]
   }
 }

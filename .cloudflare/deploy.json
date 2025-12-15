@@ -52,16 +52,16 @@
         "command": "pnpm install"
       },
       {
-        "title": "Generate database schema",
+        "title": "Generate Better Auth schema",
         "command": "pnpm auth:generate"
       },
       {
-        "title": "Generate migrations",
+        "title": "Generate database migrations",
         "command": "pnpm db:generate"
       },
       {
-        "title": "Apply migrations",
-        "command": "pnpm db:migrate:prod"
+        "title": "Apply migrations to D1 database",
+        "command": "pnpm wrangler d1 migrations apply better-auth-db --remote"
       }
     ]
   }

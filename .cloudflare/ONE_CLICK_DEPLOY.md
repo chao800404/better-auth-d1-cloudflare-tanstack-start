@@ -22,7 +22,8 @@ After deployment, your D1 database is created but **empty**. You need to apply m
 3. Add these secrets:
    - `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token
    - `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
-4. Go to **Actions** tab → Select "Deploy and Initialize D1" → Click "Run workflow"
+4. Go to **Actions** tab → Select "Deploy and Initialize D1"
+5. Click "Run workflow" (If you changed the D1 database name during deployment, enter it in the input field)
 
 This will automatically deploy and initialize your D1 database!
 

@@ -2,6 +2,11 @@ name: Deploy and Initialize D1
 
 on:
   workflow_dispatch:
+    inputs:
+      d1_database_name:
+        description: "D1 Database Name (default: better-auth-db)"
+        required: false
+        default: "better-auth-db"
   push:
     branches:
       - main
@@ -45,14 +50,15 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DB_NAME: ${{ github.event.inputs.d1_database_name || 'better-auth-db' }}
         run: |
-          echo "🔍 Finding D1 Database ID for 'better-auth-db'..."
+          echo "🔍 Finding D1 Database ID for '$DB_NAME'..."
 
-          # List databases and fetch ID for better-auth-db
-          DB_ID=$(npx wrangler d1 list --json | jq -r '.[] | select(.name == "better-auth-db") | .uuid')
+          # List databases and fetch ID for the specified database name
+          DB_ID=$(npx wrangler d1 list --json | jq -r --arg name "$DB_NAME" '.[] | select(.name == $name) | .uuid')
 
           if [ -z "$DB_ID" ] || [ "$DB_ID" == "null" ]; then
-            echo "❌ Error: Could not find database 'better-auth-db'"
+            echo "❌ Error: Could not find database '$DB_NAME'"
             echo "Available databases:"
             npx wrangler d1 list
             exit 1

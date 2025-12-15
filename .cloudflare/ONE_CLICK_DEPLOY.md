@@ -11,6 +11,35 @@ Deploy this template to Cloudflare Workers in just a few clicks!
 
 That's it! Your app will be live at `https://your-worker.workers.dev`
 
+## ⚠️ Important: Initialize D1 Database
+
+After deployment, your D1 database is created but **empty**. You need to apply migrations:
+
+### Option 1: Using GitHub Actions (Recommended)
+
+1. Go to your forked repository on GitHub
+2. Navigate to **Settings** → **Secrets and variables** → **Actions**
+3. Add these secrets:
+   - `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token
+   - `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
+4. Go to **Actions** tab → Select "Deploy and Initialize D1" → Click "Run workflow"
+
+This will automatically deploy and initialize your D1 database!
+
+### Option 2: Manual Migration
+
+```bash
+# 1. Clone your repository
+git clone https://github.com/YOUR_USERNAME/your-repo.git
+cd your-repo
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Apply migrations to production D1
+pnpm db:migrate:prod
+```
+
 ## What Gets Created Automatically
 
 - ✅ D1 Database (`better-auth-db`)

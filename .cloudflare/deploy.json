@@ -60,9 +60,10 @@
         "command": "pnpm db:generate"
       },
       {
-        "title": "Apply migrations to D1 database",
-        "command": "wrangler d1 migrations apply DATABASE --remote"
+        "title": "Prepare migration files",
+        "command": "ls -la drizzle/*.sql && echo 'Migration files ready for deployment'"
       }
-    ]
+    ],
+    "note": "⚠️ IMPORTANT: After deployment, you need to initialize the D1 database. Clone your repository and run: pnpm db:migrate:prod"
   }
 }

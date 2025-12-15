@@ -34,7 +34,23 @@ Cloudflare will guide you to:
 **👉 Verification:**
 Once deployed, simply visit your new website URL. The database tables will be **automatically created** instantly upon your first visit. You can start registering users right away!
 
-> **Note:** For production security, you should rotate the `BETTER_AUTH_SECRET` later using `wrangler secret put BETTER_AUTH_SECRET`.
+> **Note:** The app works immediately thanks to auto-detection, but for **Production Stability**, please follow the steps below.
+
+### ⚠️ IMPORTANT: Production Setup
+
+To ensure your app runs securely and reliably (especially for OAuth callbacks), you **must** configure these variables in the Cloudflare Dashboard:
+
+1. **Set `PUBLIC_URL`** (Critical):
+   - Go to **Settings > Variables-and Secrets** in your Worker dashboard.
+   - Add `PUBLIC_URL` with your worker's value (e.g., `https://your-project.workers.dev`).
+   - _Why?_ Prevents "Host Header Injection" attacks and ensures correct OAuth redirects.
+
+2. **Verify `BETTER_AUTH_SECRET`**:
+   - Ensure you provided a strong random string during deployment.
+   - To check or update it later, run:
+     ```bash
+     wrangler secret put BETTER_AUTH_SECRET
+     ```
 
 ---
 
